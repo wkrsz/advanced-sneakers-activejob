@@ -5,6 +5,8 @@ require 'pry-byebug'
 require 'advanced/sneakers/activejob'
 require 'active_job/gem_version'
 
+ENV['RABBITMQ_URL'] ||= 'amqp://guest:guest@localhost:5672/advanced_sneakers'
+
 Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
 
 RSpec.configure do |config|
