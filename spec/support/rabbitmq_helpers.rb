@@ -7,6 +7,8 @@ module RabbitmqHelpers
     attr_reader :client, :vhost
 
     def initialize(amqp: ENV.fetch('RABBITMQ_URL'), port: ENV.fetch('RABBITMQ_HTTP_PORT', 15_672).to_i, scheme: 'http')
+      puts amqp
+
       uri = URI(amqp)
       @vhost = uri.path[%r{/([^/]+)}, 1]
 
@@ -20,7 +22,9 @@ module RabbitmqHelpers
     end
 
     def reset_vhost
+      puts 'delete_vhost'
       delete_vhost
+      puts 'create_vhost'
       create_vhost
     end
 

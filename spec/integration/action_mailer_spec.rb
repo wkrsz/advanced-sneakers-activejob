@@ -4,16 +4,21 @@ describe 'ActiveJob support of ActionMailer', :rabbitmq do
   context 'when Rails application has ActionMailer enabled' do
     context 'when :sneakers adapter is used' do
       it 'loses emails' do
+        puts 'cleanup_logs'
         cleanup_logs
+        puts 'start_sneakers_consumers(adapter: :sneakers)'
         start_sneakers_consumers(adapter: :sneakers)
+        puts "in_app_process(adapter: :sneakers) { SampleMailer.greetings(name: 'Sneakers').deliver_later }"
         in_app_process(adapter: :sneakers) { SampleMailer.greetings(name: 'Sneakers').deliver_later }
 
+        puts 'expect_logs'
         expect_logs name: 'rails',
                     to_include: 'Enqueued ActionMailer::DeliveryJob to Sneakers(mailers) with arguments: "SampleMailer", "greetings", "deliver_now", {:name=>"Sneakers"}',
                     to_exclude: [
                       'Hello, Sneakers',
                       'Performed ActionMailer::DeliveryJob'
                     ]
+        puts 'test is over'
       end
     end
 

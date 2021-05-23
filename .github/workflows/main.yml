@@ -5,6 +5,7 @@ on: [push,pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
 
     container: ruby:${{ matrix.ruby }}
 
@@ -20,15 +21,15 @@ jobs:
       matrix:
         ruby:
           - 2.5.8
-          - 2.6.6
-          - 2.7.1
+          # - 2.6.6
+          # - 2.7.1
         gemfile:
           - gemfiles/activejob_4.2.x.gemfile
-          - gemfiles/activejob_5.2.x.gemfile
-          - gemfiles/activejob_6.0.x.gemfile
-        exclude:
-          - ruby: 2.7.1
-            gemfile: gemfiles/activejob_4.2.x.gemfile
+          # - gemfiles/activejob_5.2.x.gemfile
+          # - gemfiles/activejob_6.0.x.gemfile
+        # exclude:
+        #   - ruby: 2.7.1
+        #     gemfile: gemfiles/activejob_4.2.x.gemfile
 
     steps:
     - name: Checkout code

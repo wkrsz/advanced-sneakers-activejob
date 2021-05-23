@@ -12,6 +12,8 @@ module LogHelpers
       loop do
         @text = filter_logs(text: file.tap(&:rewind).read, filters: filters)
 
+        puts @text
+
         break if to_include.all? { |line| @text.include?(line) } &&
                  to_exclude.none? { |line| @text.include?(line) }
 

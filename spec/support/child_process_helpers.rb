@@ -8,6 +8,7 @@ module ChildProcessHelpers
     output_reader, output_writer = IO.pipe
     err_reader, err_writer = IO.pipe
 
+    puts 'run_app_process'
     run_app_process(adapter: adapter, read: input_reader, write: output_writer, err: err_writer, env: env)
 
     input_writer.write source_code(block) # Sending code block to separate process
@@ -29,6 +30,7 @@ module ChildProcessHelpers
     output_reader.close
     err_reader.close
 
+    puts [result, errors]
     [result, errors]
   end
 
@@ -56,19 +58,21 @@ module ChildProcessHelpers
   end
 
   def stop_sneakers_consumers
+    puts 'stoppping sneakers consumers'
     return unless File.exist?('sneakers.pid')
 
     kill_process(File.open('sneakers.pid').read.to_i)
 
     FileUtils.rm('sneakers.pid')
+    puts 'stopped sneakers consumers'
   end
 
   def kill_process(pid)
-    Process.kill('TERM', pid)
+    Process.kill('SIGKILL', pid)
 
     loop do
-      Process.kill(0, pid)
-      sleep 0.01
+      sleep 0.1
+      puts Process.kill(0, pid)
     end
   rescue Errno::ESRCH
     # process has died
